@@ -128,6 +128,8 @@ echo mysql-server mysql-server/root_password_again password root | debconf-set-s
 # able to send mail, even with postfix installed.
 echo postfix postfix/main_mailer_type select Internet Site | debconf-set-selections
 echo postfix postfix/mailname string vvv | debconf-set-selections
+# Disable ipv6 as some ISPs/mail servers have problems with it
+echo "inet_protocols = ipv4" >> /etc/postfix/main.cf
 
 # Provide our custom apt sources before running `apt-get update`
 ln -sf /srv/config/apt-source-append.list /etc/apt/sources.list.d/vvv-sources.list
@@ -539,11 +541,11 @@ PHP
 
 	# Download phpMyAdmin
 	if [[ ! -d /srv/www/default/database-admin ]]; then
-		echo "Downloading phpMyAdmin 4.1.14..."
+		echo "Downloading phpMyAdmin 4.2.11..."
 		cd /srv/www/default
-		wget -q -O phpmyadmin.tar.gz 'http://sourceforge.net/projects/phpmyadmin/files/phpMyAdmin/4.1.14/phpMyAdmin-4.1.14-all-languages.tar.gz/download'
+		wget -q -O phpmyadmin.tar.gz 'http://sourceforge.net/projects/phpmyadmin/files/phpMyAdmin/4.2.11/phpMyAdmin-4.2.11-all-languages.tar.gz/download'
 		tar -xf phpmyadmin.tar.gz
-		mv phpMyAdmin-4.1.14-all-languages database-admin
+		mv phpMyAdmin-4.2.11-all-languages database-admin
 		rm phpmyadmin.tar.gz
 	else
 		echo "PHPMyAdmin already installed."
